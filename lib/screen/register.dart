@@ -14,7 +14,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final List<Batch> _lstBatches = [];
+  List<Batch> _lstBatches = [];
   var _dropDownValue;
 
   final _key = GlobalKey<FormState>();
@@ -23,9 +23,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _usernameController = TextEditingController(text: 'kiran');
   final _passwordController = TextEditingController(text: 'kiran123');
 
+  @override
   void initState() {
     getBatches();
     super.initState();
+  }
+
+  getBatches() async {
+    _lstBatches = await BatchDataSource().getBatch();
   }
 
   _showMessage(int status) {
