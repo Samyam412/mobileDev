@@ -3,6 +3,7 @@ import 'package:batch_student_starter/repository/student_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';
 
+import '../data_source/local_data_source/batch_data_source.dart';
 import '../model/batch.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -14,13 +15,18 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final List<Batch> _lstBatches = [];
-  final String _dropDownValue = "";
+  var _dropDownValue;
 
   final _key = GlobalKey<FormState>();
   final _fnameController = TextEditingController(text: 'Kiran');
   final _lnameController = TextEditingController(text: 'Rana');
   final _usernameController = TextEditingController(text: 'kiran');
   final _passwordController = TextEditingController(text: 'kiran123');
+
+  void initState() {
+    getBatches();
+    super.initState();
+  }
 
   _showMessage(int status) {
     if (status > 0) {
@@ -89,38 +95,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(
                     height: 8,
                   ),
-                  // FutureBuilder(
-                  //   future: BatchDataSource().getAllBatch(),
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.hasData) {
-                  //       return DropdownButtonFormField(
-                  //         validator: (value) {
-                  //           if (value == null || value.isEmpty) {
-                  //             return 'Please select batch';
-                  //           }
-                  //           return null;
-                  //         },
-                  //         isExpanded: true,
-                  //         decoration: const InputDecoration(
-                  //           labelText: 'Select Batch',
-                  //         ),
-                  //         items: _lstBatches
-                  //             .map((batch) => DropdownMenuItem(
-                  //                   value: batch.batchName,
-                  //                   child: Text(batch.batchName),
-                  //                 ))
-                  //             .toList(),
-                  //         onChanged: (value) {
-                  //           _dropDownValue = value!;
-                  //         },
-                  //       );
-                  //     } else {
-                  //       return const Center(
-                  //         child: CircularProgressIndicator(),
-                  //       );
-                  //     }
-                  //   },
-                  // ),
+                  FutureBuilder(
+                    future: BatchDataSource().getBatch(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return DropdownButtonFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please select batch';
+                            }
+                            return null;
+                          },
+                          isExpanded: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Select Batch',
+                          ),
+                          items: snapshot.data!
+                              .map((batch) => DropdownMenuItem(
+                                    value: batch.batchName,
+                                    child: Text(batch.batchName),
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            _dropDownValue = value!;
+                          },
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
                   const SizedBox(
                     height: 8,
                   ),
