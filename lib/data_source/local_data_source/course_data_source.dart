@@ -13,4 +13,13 @@ class CourseDataSource {
       return 0;
     }
   }
+
+  Future<List<Course>> getAllCoures() async {
+    try {
+      return objectBoxInstance.getAllCourses();
+    } catch (e) {
+      return [];
+    }
+  }
+
 }

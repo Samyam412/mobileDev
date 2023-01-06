@@ -66,7 +66,7 @@ class ObjectBoxInstance {
   //--------Course Queries--------
 
   void insertCourses() {
-    List<Course> lstCourse = getAllCoures();
+    List<Course> lstCourse = getAllCourses();
     if (lstCourse.isEmpty) {
       addCourse(Course('Web-Api'));
       addCourse(Course('Flutter'));
@@ -80,7 +80,7 @@ class ObjectBoxInstance {
     return _course.put(course);
   }
 
-  List<Course> getAllCoures() {
+  List<Course> getAllCourses() {
     return _course.getAll();
   }
 }
