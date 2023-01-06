@@ -2,6 +2,8 @@ import 'package:batch_student_starter/model/batch.dart';
 import 'package:batch_student_starter/model/student.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../model/course.dart';
+
 import '../objectbox.g.dart';
 
 //this is a database
@@ -9,13 +11,16 @@ class ObjectBoxInstance {
   late final Store _store;
   late final Box<Batch> _batch;
   late final Box<Student> _student;
+  late final Box<Course> _course;
 
   //constructors
   ObjectBoxInstance(this._store) {
     _batch = Box<Batch>(_store);
     _student = Box<Student>(_store);
+    _course = Box<Course>(_store);
 
     insertBaches();
+    insertCourses();
   }
 //initalization of object box
 
@@ -56,5 +61,26 @@ class ObjectBoxInstance {
 
   List<Student> getAllStudent() {
     return _student.getAll();
+  }
+
+  //--------Course Queries--------
+
+  void insertCourses() {
+    List<Course> lstCourse = getAllCoures();
+    if (lstCourse.isEmpty) {
+      addCourse(Course('Web-Api'));
+      addCourse(Course('Flutter'));
+      addCourse(Course('Django'));
+      addCourse(Course('Design thinking'));
+      addCourse(Course('React'));
+    }
+  }
+
+  int addCourse(Course course) {
+    return _course.put(course);
+  }
+
+  List<Course> getAllCoures() {
+    return _course.getAll();
   }
 }

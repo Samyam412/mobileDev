@@ -69,7 +69,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 8),
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {}
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.pushNamed(context, '/dashboardScreen');
+                        }
                       },
                       child: const SizedBox(
                         height: 40,

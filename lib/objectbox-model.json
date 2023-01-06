@@ -62,12 +62,37 @@
           "relationTarget": "Batch"
         }
       ],
+      "relations": [
+        {
+          "id": "1:2974043922858506784",
+          "name": "course",
+          "targetId": "5:5200241122027633447"
+        }
+      ]
+    },
+    {
+      "id": "5:5200241122027633447",
+      "lastPropertyId": "2:1728539128480468370",
+      "name": "Course",
+      "properties": [
+        {
+          "id": "1:5875190137754429520",
+          "name": "courseId",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:1728539128480468370",
+          "name": "courseName",
+          "type": 9
+        }
+      ],
       "relations": []
     }
   ],
-  "lastEntityId": "4:436844430367801499",
+  "lastEntityId": "5:5200241122027633447",
   "lastIndexId": "2:6966801992723529111",
-  "lastRelationId": "0:0",
+  "lastRelationId": "1:2974043922858506784",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

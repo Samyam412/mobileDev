@@ -36,7 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   _showMessage(int status) {
     if (status > 0) {
       MotionToast.success(
-        description: const Text('Studnet added'),
+        description: const Text('Student added'),
       ).show(context);
     } else {
       MotionToast.error(description: const Text('Error in adding student'))
