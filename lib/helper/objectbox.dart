@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:batch_student_starter/model/batch.dart';
 import 'package:batch_student_starter/model/student.dart';
 import 'package:path_provider/path_provider.dart';
@@ -33,6 +35,12 @@ class ObjectBoxInstance {
     );
 
     return ObjectBoxInstance(store);
+  }
+
+  //delete store and all boxes
+  static Future<void> deleteDatabase() async {
+    var dir = await getApplicationDocumentsDirectory();
+    Directory('${dir.path}/student_course').deleteSync(recursive: true);
   }
 
   //--------Batch Queries--------

@@ -1,10 +1,15 @@
 import 'package:batch_student_starter/model/student.dart';
+import 'package:batch_student_starter/repository/course_repo.dart';
 import 'package:batch_student_starter/repository/student_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import '../data_source/local_data_source/batch_data_source.dart';
 import '../model/batch.dart';
+import '../model/course.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,12 +21,13 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   List<Batch> _lstBatches = [];
   var _dropDownValue;
+  List<Course> _lstCourseSelected = [];
 
   final _key = GlobalKey<FormState>();
-  final _fnameController = TextEditingController(text: 'Kiran');
-  final _lnameController = TextEditingController(text: 'Rana');
-  final _usernameController = TextEditingController(text: 'kiran');
-  final _passwordController = TextEditingController(text: 'kiran123');
+  final _fnameController = TextEditingController(text: 'Samyam');
+  final _lnameController = TextEditingController(text: 'katwal');
+  final _usernameController = TextEditingController(text: 'samyam');
+  final _passwordController = TextEditingController(text: 'samyam123');
 
   @override
   void initState() {
@@ -52,8 +58,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _passwordController.text,
     );
 
+    final batch = _lstBatches
+        .firstWhere((element) => element.batchName == _dropDownValue);
+
+    student.batch.target = batch;
+
+    for (Course c in _lstCourseSelected) {
+      student.course.add(c);
+    }
     int status = await StudentRepositoryImpl().addStudent(student);
     _showMessage(status);
+  }
+
+  _showStudentCourse() async {
+    List<Student> lstStudent = await StudentRepositoryImpl().getStudent();
+    for (Student s in lstStudent) {
+      debugPrint(s.fname);
+      for (Course c in s.course) {
+        debugPrint(c.courseName);
+      }
+    }
   }
 
   @override
@@ -135,6 +159,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(
                     height: 8,
                   ),
+                  FutureBuilder(
+                      future: CourseRepositoryImpl().getAllCourses(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return MultiSelectDialogField(
+                            title: const Text('Select Course'),
+                            items: snapshot.data!
+                                .map((course) =>
+                                    MultiSelectItem(course, course.courseName))
+                                .toList(),
+                            listType: MultiSelectListType.CHIP,
+                            buttonText: const Text('Select course'),
+                            buttonIcon: const Icon(Icons.search),
+                            onConfirm: (values) {
+                              _lstCourseSelected = values;
+                            },
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey, width: 1),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            validator: ((value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please select course';
+                              }
+                              return null;
+                            }),
+                          );
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      }),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   TextFormField(
                     controller: _usernameController,
                     decoration: const InputDecoration(
@@ -173,6 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () {
                         if (_key.currentState!.validate()) {
                           _saveStudent();
+                          _showStudentCourse();
                         }
                       },
                       child: const Text(
